@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp1", "WindowsFormsApp1\WindowsFormsApp1.csproj", "{0C85DA10-1B2C-4EE5-9782-78CAF0886523}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAPCTracker", "HAPCTracker\HAPCTracker.csproj", "{0C85DA10-1B2C-4EE5-9782-78CAF0886523}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
