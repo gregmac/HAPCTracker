@@ -24,7 +24,16 @@ namespace HAPCTracker
         /// <summary>
         /// How many minutes the PC is idle before user is considered AFK.
         /// </summary>
-        public int? AwayMinutes { get; set; } = 5;
+        public int AwayMinutes { get; set; } = DefaultAwayMinutes;
+
+        public static int DefaultAwayMinutes = 5;
+
+        /// <summary>
+        /// How many frequently (in seconds) to post status to HomeAssistant.
+        /// </summary>
+        public int UpdateSeconds { get; set; } = DefaultUpdateSeconds;
+
+        public static int DefaultUpdateSeconds = 30;
 
         /// <summary>
         /// Try validating configuration values.
@@ -34,7 +43,8 @@ namespace HAPCTracker
         {
             if (!Uri.TryCreate(BaseUrl, UriKind.Absolute, out _)) throw new ArgumentException("Invalid BaseUrl value");
             if (string.IsNullOrWhiteSpace(AccessToken)) throw new ArgumentNullException("Missing AccessToken value");
-            if (!(AwayMinutes > 0)) throw new ArgumentOutOfRangeException("AwayMinutes must be greater than 0");
+            if (AwayMinutes <= 0) throw new ArgumentOutOfRangeException("AwayMinutes must be greater than 0");
+            if (UpdateSeconds <= 0) throw new ArgumentOutOfRangeException("UpdateSeconds must be greater than 0");
         }
 
         /// <summary>
@@ -67,7 +77,8 @@ namespace HAPCTracker
             {
                 BaseUrl = subKey.GetValue<string>(nameof(BaseUrl)),
                 AccessToken = subKey.GetValue<string>(nameof(AccessToken)),
-                AwayMinutes = subKey.GetValue<int?>(nameof(AwayMinutes)),
+                AwayMinutes = subKey.GetValue<int>(nameof(AwayMinutes), DefaultAwayMinutes),
+                UpdateSeconds = subKey.GetValue<int>(nameof(UpdateSeconds), DefaultUpdateSeconds),
             };
         }
 
@@ -86,6 +97,7 @@ namespace HAPCTracker
             subKey.SetValue(nameof(BaseUrl), BaseUrl);
             subKey.SetValue(nameof(AccessToken), AccessToken);
             subKey.SetValue(nameof(AwayMinutes), AwayMinutes);
+            subKey.SetValue(nameof(UpdateSeconds), UpdateSeconds);
         }
     }
 }

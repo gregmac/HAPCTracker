@@ -13,6 +13,7 @@ namespace HAPCTracker
             UiUrl.Bind(config, nameof(Configuration.BaseUrl));
             UiToken.Bind(config, nameof(Configuration.AccessToken));
             UiAfkTime.Bind(config, nameof(Configuration.AwayMinutes));
+            UiUpdateSeconds.Bind(config, nameof(Configuration.UpdateSeconds));
         }
 
         private static ConfigForm Instance { get; set; }

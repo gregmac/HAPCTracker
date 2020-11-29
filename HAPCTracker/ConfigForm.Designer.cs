@@ -41,9 +41,13 @@ namespace HAPCTracker
             this.UiAfkTime = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.UiUpdateSeconds = new System.Windows.Forms.NumericUpDown();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.UiAfkTime)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UiUpdateSeconds)).BeginInit();
             this.SuspendLayout();
             // 
             // UiUrl
@@ -64,7 +68,7 @@ namespace HAPCTracker
             // 
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 170);
+            this.panel1.Location = new System.Drawing.Point(0, 180);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(467, 52);
             this.panel1.TabIndex = 2;
@@ -147,7 +151,7 @@ namespace HAPCTracker
             this.UiAfkTime.Size = new System.Drawing.Size(60, 23);
             this.UiAfkTime.TabIndex = 5;
             this.UiAfkTime.Value = new decimal(new int[] {
-            5,
+            1,
             0,
             0,
             0});
@@ -171,13 +175,57 @@ namespace HAPCTracker
             this.label4.TabIndex = 7;
             this.label4.Text = "minutes";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(197, 149);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(50, 15);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "seconds";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(22, 149);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(106, 15);
+            this.label6.TabIndex = 9;
+            this.label6.Text = "Update Frequency:";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // UiUpdateSeconds
+            // 
+            this.UiUpdateSeconds.Location = new System.Drawing.Point(134, 147);
+            this.UiUpdateSeconds.Maximum = new decimal(new int[] {
+            86400,
+            0,
+            0,
+            0});
+            this.UiUpdateSeconds.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.UiUpdateSeconds.Name = "UiUpdateSeconds";
+            this.UiUpdateSeconds.Size = new System.Drawing.Size(60, 23);
+            this.UiUpdateSeconds.TabIndex = 8;
+            this.UiUpdateSeconds.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // ConfigForm
             // 
             this.AcceptButton = this.uiSave;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.uiCancel;
-            this.ClientSize = new System.Drawing.Size(467, 222);
+            this.ClientSize = new System.Drawing.Size(467, 232);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.UiUpdateSeconds);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.UiAfkTime);
@@ -194,6 +242,7 @@ namespace HAPCTracker
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.UiAfkTime)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UiUpdateSeconds)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -213,6 +262,9 @@ namespace HAPCTracker
         private System.Windows.Forms.NumericUpDown UiAfkTime;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown UiUpdateSeconds;
     }
 }
 
