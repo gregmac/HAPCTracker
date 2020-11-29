@@ -30,7 +30,7 @@ jobs:
     - name: Publish
       run: dotnet publish --configuration Release --no-restore --self-contained=false /p:PublishSingleFile=true /p:RuntimeIdentifier=win-x64
     - name: Save Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: HAPCTracker
-          path: HAPCTracker\bin\Release\netcoreapp3.1\win-x64\publish\HAPCTracker.exe
+      uses: actions/upload-artifact@v2
+      with:
+        name: HAPCTracker
+        path: HAPCTracker\bin\Release\netcoreapp3.1\win-x64\publish\HAPCTracker.exe
