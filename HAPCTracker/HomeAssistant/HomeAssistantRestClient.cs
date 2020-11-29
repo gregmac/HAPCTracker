@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -21,13 +22,14 @@ namespace HAPCTracker.HomeAssistant
         private JsonSerializerOptions SerializerOptions { get; }
             = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
-        public async Task PostSensor(string sensorName, SensorData data)
+        public async Task<HttpStatusCode> PostSensor(string sensorName, SensorData data)
         {
             var json = new StringContent(JsonSerializer.Serialize(data, SerializerOptions));
-            var postUrl = new Uri(BaseUrl, $"api/sensor/{sensorName}");
+            var postUrl = new Uri(BaseUrl, $"api/states/{sensorName}");
 
-            await Client.PostAsync(postUrl, json).ConfigureAwait(false);
-            // todo: error handling
+            var res = await Client.PostAsync(postUrl, json).ConfigureAwait(false);
+            // todo: better error handling
+            return res.StatusCode;
         }
     }
 }
