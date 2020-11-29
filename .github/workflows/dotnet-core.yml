@@ -28,7 +28,7 @@ jobs:
     #- name: Test
     #  run: dotnet test --no-restore --verbosity normal
     - name: Publish exe
-      run: dotnet publish .\HAPCTracker\HAPCTracker.csproj --configuration Release --no-restore /p:PublishSingleFile=true /p:RuntimeIdentifier=win-x64 --self-contained=false
+      run: dotnet publish .\HAPCTracker\HAPCTracker.csproj --configuration Release --no-restore /p:PublishSingleFile=true --self-contained=false
     - name: Save Artifacts
       uses: actions/upload-artifact@v2
       with:
