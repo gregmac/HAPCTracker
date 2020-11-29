@@ -33,4 +33,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: HAPCTracker
-        path: HAPCTracker\bin\Release\netcoreapp3.1\win-x64\publish\HAPCTracker.exe
+        path: src\HAPCTracker\bin\Release\netcoreapp3.1\win-x64\publish\HAPCTracker.exe
