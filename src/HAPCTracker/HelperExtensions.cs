@@ -1,9 +1,11 @@
 ﻿using Microsoft.Win32;
+using System;
+using System.Text;
 using System.Windows.Forms;
 
 namespace HAPCTracker
 {
-    public static class FormExtensions
+    internal static class HelperExtensions
     {
         /// <summary>
         /// Sets <see cref="NotifyIcon.Visible"/> to false.
@@ -42,5 +44,20 @@ namespace HAPCTracker
         /// <returns></returns>
         public static T GetValue<T>(this RegistryKey key, string name, T defaultValue = default)
             => (T)key.GetValue(name, defaultValue);
+
+        /// <summary>
+        /// Unwrap all exception messages (traversing into inner exceptions) into a single string.
+        /// </summary>
+        public static string GetMessages(this Exception ex)
+        {
+            var result = new StringBuilder();
+            while (ex != null)
+            {
+                result.Append(ex.Message);
+                if (!ex.Message.EndsWith(".")) result.Append(": ");
+                ex = ex.InnerException;
+            }
+            return result.ToString();
+        }
     }
 }

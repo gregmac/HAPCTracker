@@ -18,7 +18,7 @@ namespace HomeAssistant.Mqtt
 
         protected ConcurrentBag<ComponentBase> Sensors { get; }
 
-        protected HomeAssistantMqttClient(IMqttClient client, MqttClientCredentials credentials)
+        protected HomeAssistantMqttClient(IMqttClient client, string serverName, MqttClientCredentials credentials)
         {
             Client = client;
             Credentials = credentials;
@@ -31,7 +31,20 @@ namespace HomeAssistant.Mqtt
             SerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
 
             Sensors = new ConcurrentBag<ComponentBase>();
+            ServerName = serverName;
         }
+
+        /// <summary>
+        /// Indicates if the client is currently connected
+        /// </summary>
+        public bool IsConnected => Client.IsConnected;
+
+        public Exception LastConnectionError { get; private set; }
+
+        /// <summary>
+        /// The server name we're connected to
+        /// </summary>
+        public string ServerName { get; }
 
         public static async Task<HomeAssistantMqttClient> CreateAsync(string server, string clientId, string username = null, string password = null)
         {
@@ -41,14 +54,23 @@ namespace HomeAssistant.Mqtt
                 password: password);
             var client = await MqttClient.CreateAsync(server).ConfigureAwait(true);
 
-            return new HomeAssistantMqttClient(client, credentials);
+            return new HomeAssistantMqttClient(client, server, credentials);
         }
 
-        public async Task ConnectIfNeededAsync()
+        public async Task<bool> ConnectIfNeededAsync()
         {
-            if (!Client.IsConnected)
+            if (Client.IsConnected) return true;
+
+            try
             {
                 await Client.ConnectAsync(Credentials).ConfigureAwait(false);
+                LastConnectionError = null;
+                return true;
+            }
+            catch(Exception ex)
+            {
+                LastConnectionError = ex;
+                return false;
             }
         }
 
@@ -57,13 +79,15 @@ namespace HomeAssistant.Mqtt
 
         public async Task PublishAsync<T>(string topic, T payload, MqttQualityOfService qos = MqttQualityOfService.AtMostOnce)
         {
-            await ConnectIfNeededAsync().ConfigureAwait(false);
-            await Client.PublishAsync(
-                new MqttApplicationMessage(
-                    topic,
-                    Serialize(payload)),
-                qos)
-                .ConfigureAwait(false);
+            if (await ConnectIfNeededAsync().ConfigureAwait(false))
+            {
+                await Client.PublishAsync(
+                    new MqttApplicationMessage(
+                        topic,
+                        Serialize(payload)),
+                    qos)
+                    .ConfigureAwait(false);
+            }
         }
 
         public async Task AddAsync(ComponentBase item)

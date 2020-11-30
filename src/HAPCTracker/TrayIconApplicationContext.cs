@@ -3,6 +3,7 @@ using HomeAssistant.Mqtt.Components;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Net.Mqtt;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -85,6 +86,7 @@ namespace HAPCTracker
             context.TrayIcon.ContextMenuStrip.Items.Add(new ToolStripMenuItem("&Configuration", null, (_, __)
                 => ConfigForm.ModifyConfig(config, () => context.SaveAndApply(config))));
             context.TrayIcon.ContextMenuStrip.Items.Add(new ToolStripMenuItem("E&xit", null, (_, __) => Application.Exit()));
+            context.TrayIcon.Click += context.TrayIcon_Click;
 
             // TODO unclear why this is needed here - but ConnectedAsync never finishes without it
             await Task.Delay(1).ConfigureAwait(false);
@@ -162,12 +164,74 @@ namespace HAPCTracker
                             { "hostname", Environment.MachineName },
                             { "os", OsName },
                         });
+
+                    switch (HaClient.LastConnectionError)
+                    {
+                        case null:
+                            SetCurrentError(null);
+                            break;
+                        case MqttClientException mqttException:
+                            SetCurrentError(mqttException.InnerException); // top-level exception message is redundant
+                            break;
+                        default:
+                            SetCurrentError(HaClient.LastConnectionError);
+                            break;
+                    }
                 }
                 catch(Exception ex)
                 {
-                    TrayIcon.Text = ex.Message;
+                    SetCurrentError(ex);
                 }
+
+                // max 63 chars
+                try
+                {
+                    TrayIcon.Text = CurrentError != null
+                        ? $"{TrayIconTitle}\nError: Click for details"
+                        : $"{TrayIconTitle}\n{(HaClient.IsConnected ? "Connected" : "Not connected")}";
+                }
+                catch (Exception ex)
+                {
+                    TrayIcon.Text = ex.Message.Substring(0, 63);
+                }
+
                 await Task.Delay(UpdateInterval).ConfigureAwait(false);
+            }
+        }
+
+        private Exception CurrentError { get; set; }
+
+        private void SetCurrentError(Exception ex)
+        {
+            var message = ex?.GetMessages();
+            var lastMessage = CurrentError?.GetMessages();
+
+            CurrentError = ex;
+
+            if (message != null && message != lastMessage)
+            {
+                TrayIcon.ShowBalloonTip(5000, $"{TrayIconTitle} Error", message, ToolTipIcon.Error);
+            }
+        }
+
+        private void TrayIcon_Click(object sender, EventArgs e)
+        {
+            if (e is MouseEventArgs mouseEvent && mouseEvent.Button != MouseButtons.Left)
+            {
+                return;
+            }
+
+            if (CurrentError != null)
+            {
+                TrayIcon.ShowBalloonTip(5000, null, CurrentError.GetMessages(), ToolTipIcon.Error);
+            }
+            else if (HaClient.IsConnected)
+            {
+                TrayIcon.ShowBalloonTip(5000, null, $"Connected to {HaClient.ServerName} and reporting '{HaAwaySensor.Name}' ({HaAwaySensor.Type}.{HaAwaySensor.MqttName})", ToolTipIcon.Info);
+            }
+            else
+            {
+                TrayIcon.ShowBalloonTip(5000, null, "Not connected", ToolTipIcon.Warning);
             }
         }
     }

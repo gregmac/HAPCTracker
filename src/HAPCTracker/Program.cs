@@ -17,6 +17,5 @@ namespace HAPCTracker
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(await TrayIconApplicationContext.CreateAsync().ConfigureAwait(false));
         }
-
     }
 }
