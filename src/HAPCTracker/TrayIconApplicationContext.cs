@@ -85,7 +85,9 @@ namespace HAPCTracker
             context.TrayIcon.ContextMenuStrip.Items.Add(new ToolStripMenuItem("&Configuration", null, (_, __)
                 => ConfigForm.ModifyConfig(config, () => context.SaveAndApply(config))));
             context.TrayIcon.ContextMenuStrip.Items.Add(new ToolStripMenuItem("E&xit", null, (_, __) => Application.Exit()));
-            await Task.Delay(100).ConfigureAwait(false);
+
+            // TODO unclear why this is needed here - but ConnectedAsync never finishes without it
+            await Task.Delay(1).ConfigureAwait(false);
 
             // apply config or prompt user
             if (config.IsValid())
@@ -130,7 +132,6 @@ namespace HAPCTracker
         {
             AwayTime = TimeSpan.FromMinutes(config.AwayMinutes);
             UpdateInterval = TimeSpan.FromSeconds(config.UpdateSeconds);
-            await Task.Delay(100).ConfigureAwait(false);
 
             HaClient = await HomeAssistantMqttClient.CreateAsync(config.MqttServer, MqttClientId).ConfigureAwait(false);
 

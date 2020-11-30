@@ -39,7 +39,6 @@ namespace HomeAssistant.Mqtt
                 clientId: clientId,
                 userName: username,
                 password: password);
-            await Task.Delay(100).ConfigureAwait(false);
             var client = await MqttClient.CreateAsync(server).ConfigureAwait(true);
 
             return new HomeAssistantMqttClient(client, credentials);
