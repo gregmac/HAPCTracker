@@ -135,7 +135,7 @@ namespace HAPCTracker
 
             HaClient = await HomeAssistantMqttClient.CreateAsync(config.MqttServer, MqttClientId).ConfigureAwait(false);
 
-            HaAwaySensor = new BinarySensor(SensorName, AwayTime.Add(TimeSpan.FromSeconds(5)));
+            HaAwaySensor = new BinarySensor(SensorName, AwayTime.Add(TimeSpan.FromSeconds(5)), BinarySensorDeviceClass.occupancy);
             await HaClient.AddAsync(HaAwaySensor).ConfigureAwait(false);
         }
 

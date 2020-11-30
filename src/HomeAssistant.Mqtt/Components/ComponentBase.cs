@@ -64,5 +64,14 @@ namespace HomeAssistant.Mqtt.Components
             };
             SensorDataChanged?.Invoke(this, CurrentState);
         }
+
+        /// <summary>
+        /// Hook to override the <see cref="ConfigMessage"/> with additional data
+        /// </summary>
+        /// <param name="config"></param>
+        internal virtual void OverrideConfig(ConfigMessage config)
+        {
+            // nothing
+        }
     }
 }

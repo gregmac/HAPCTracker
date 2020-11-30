@@ -99,6 +99,7 @@ namespace HomeAssistant.Mqtt
                 JsonAttributesTemplate = $"{{{{ value_json.{nameof(SensorData.Attributes).ToLowerInvariant()} | tojson }}}}",
                 ExpireAfter = component.ExpireAfter.HasValue ? (int?)Math.Ceiling(component.ExpireAfter.Value.TotalSeconds) : null,
             };
+            component.OverrideConfig(payload);
             await PublishAsync(configChannel, payload, MqttQualityOfService.AtLeastOnce).ConfigureAwait(false);
         }
 
