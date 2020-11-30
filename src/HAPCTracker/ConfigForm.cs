@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace HAPCTracker
 {
-    public partial class ConfigForm : Form
+    public sealed partial class ConfigForm : Form
     {
         private ConfigForm(Configuration config, Action saveCallback)
         {
