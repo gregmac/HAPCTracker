@@ -7,4 +7,9 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HomeAssistant.Mqtt\HomeAssistant.Mqtt.csproj" />
+  </ItemGroup>
+
+
 </Project>

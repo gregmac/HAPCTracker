@@ -29,15 +29,13 @@ namespace HAPCTracker
         /// </summary>
         private void InitializeComponent()
         {
-            this.UiUrl = new System.Windows.Forms.TextBox();
-            this.UiToken = new System.Windows.Forms.TextBox();
+            this.UiMqttServer = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.uiCancel = new System.Windows.Forms.Button();
             this.uiSave = new System.Windows.Forms.Button();
             this.uiTest = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.UiAfkTime = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -50,25 +48,18 @@ namespace HAPCTracker
             ((System.ComponentModel.ISupportInitialize)(this.UiUpdateSeconds)).BeginInit();
             this.SuspendLayout();
             // 
-            // UiUrl
+            // UiMqttServer
             // 
-            this.UiUrl.Location = new System.Drawing.Point(134, 17);
-            this.UiUrl.Name = "UiUrl";
-            this.UiUrl.Size = new System.Drawing.Size(311, 23);
-            this.UiUrl.TabIndex = 0;
-            // 
-            // UiToken
-            // 
-            this.UiToken.Location = new System.Drawing.Point(134, 65);
-            this.UiToken.Name = "UiToken";
-            this.UiToken.Size = new System.Drawing.Size(311, 23);
-            this.UiToken.TabIndex = 1;
+            this.UiMqttServer.Location = new System.Drawing.Point(134, 17);
+            this.UiMqttServer.Name = "UiMqttServer";
+            this.UiMqttServer.Size = new System.Drawing.Size(311, 23);
+            this.UiMqttServer.TabIndex = 0;
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 180);
+            this.panel1.Location = new System.Drawing.Point(0, 119);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(467, 52);
             this.panel1.TabIndex = 2;
@@ -117,26 +108,16 @@ namespace HAPCTracker
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 20);
+            this.label1.Location = new System.Drawing.Point(52, 20);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(114, 15);
+            this.label1.Size = new System.Drawing.Size(76, 15);
             this.label1.TabIndex = 3;
-            this.label1.Text = "HomeAssistant URL:";
+            this.label1.Text = "MQTT Server:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(48, 68);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(80, 15);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Access Token:";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // UiAfkTime
             // 
-            this.UiAfkTime.Location = new System.Drawing.Point(134, 107);
+            this.UiAfkTime.Location = new System.Drawing.Point(134, 51);
             this.UiAfkTime.Maximum = new decimal(new int[] {
             1440,
             0,
@@ -159,7 +140,7 @@ namespace HAPCTracker
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(60, 109);
+            this.label3.Location = new System.Drawing.Point(60, 53);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(68, 15);
             this.label3.TabIndex = 6;
@@ -169,7 +150,7 @@ namespace HAPCTracker
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(197, 109);
+            this.label4.Location = new System.Drawing.Point(197, 53);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(50, 15);
             this.label4.TabIndex = 7;
@@ -178,7 +159,7 @@ namespace HAPCTracker
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(197, 149);
+            this.label5.Location = new System.Drawing.Point(197, 86);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(50, 15);
             this.label5.TabIndex = 10;
@@ -187,7 +168,7 @@ namespace HAPCTracker
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(22, 149);
+            this.label6.Location = new System.Drawing.Point(22, 86);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(106, 15);
             this.label6.TabIndex = 9;
@@ -196,7 +177,7 @@ namespace HAPCTracker
             // 
             // UiUpdateSeconds
             // 
-            this.UiUpdateSeconds.Location = new System.Drawing.Point(134, 147);
+            this.UiUpdateSeconds.Location = new System.Drawing.Point(134, 84);
             this.UiUpdateSeconds.Maximum = new decimal(new int[] {
             86400,
             0,
@@ -222,18 +203,16 @@ namespace HAPCTracker
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.uiCancel;
-            this.ClientSize = new System.Drawing.Size(467, 232);
+            this.ClientSize = new System.Drawing.Size(467, 171);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.UiUpdateSeconds);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.UiAfkTime);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.UiToken);
-            this.Controls.Add(this.UiUrl);
+            this.Controls.Add(this.UiMqttServer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "ConfigForm";
             this.Text = "Configuration";
@@ -250,15 +229,13 @@ namespace HAPCTracker
 
         #endregion
 
-        private System.Windows.Forms.TextBox UiUrl;
-        private System.Windows.Forms.TextBox UiToken;
+        private System.Windows.Forms.TextBox UiMqttServer;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button uiCancel;
         private System.Windows.Forms.Button uiSave;
         private System.Windows.Forms.Button uiTest;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown UiAfkTime;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;

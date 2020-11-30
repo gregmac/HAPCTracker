@@ -1,23 +1,23 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HAPCTracker
 {
     public sealed partial class ConfigForm : Form
     {
-        private ConfigForm(Configuration config, Action saveCallback)
+        private ConfigForm(Configuration config, Func<Task> saveCallback)
         {
             InitializeComponent();
             SaveCallback = saveCallback;
 
-            UiUrl.Bind(config, nameof(Configuration.BaseUrl));
-            UiToken.Bind(config, nameof(Configuration.AccessToken));
+            UiMqttServer.Bind(config, nameof(Configuration.MqttServer));
             UiAfkTime.Bind(config, nameof(Configuration.AwayMinutes));
             UiUpdateSeconds.Bind(config, nameof(Configuration.UpdateSeconds));
         }
 
         private static ConfigForm Instance { get; set; }
-        public Action SaveCallback { get; }
+        public Func<Task> SaveCallback { get; }
 
         /// <summary>
         /// Show the form as a dialog, and return true if the user saves changes.
@@ -27,7 +27,7 @@ namespace HAPCTracker
         /// <param name="config">The configuration. The values in this
         /// object will be modified</param>
         /// <param name="saveCallback">Callback when save is called</param>
-        public static bool ModifyConfig(Configuration config, Action saveCallback)
+        public static bool ModifyConfig(Configuration config, Func<Task> saveCallbackAsync)
         {
             if (Instance != null)
             {
@@ -36,16 +36,16 @@ namespace HAPCTracker
                 return false;
             }
 
-            Instance = new ConfigForm(config, saveCallback);
+            Instance = new ConfigForm(config, saveCallbackAsync);
 
             return Instance.ShowDialog() == DialogResult.OK;
         }
 
-        private void UiSave_Click(object sender, EventArgs e)
+        private async void UiSave_Click(object sender, EventArgs e)
         {
             try
             {
-                SaveCallback.Invoke();
+                await SaveCallback.Invoke().ConfigureAwait(true);
 
                 // close form
                 DialogResult = DialogResult.OK;

@@ -11,15 +11,14 @@ namespace HAPCTracker
         public const string RegistryKey = @"SOFTWARE\HAPCTracker";
 
         /// <summary>
-        /// The Base URL to the HomeAssistant instance.
+        /// The URL to the HomeAssistant MQTT server
         /// </summary>
-        public string BaseUrl { get; set; }
+        public string MqttServer { get; set; }
 
-        /// <summary>
-        /// The HomeAssistant Long-lived Access Token.
-        /// See https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token
-        /// </summary>
-        public string AccessToken { get; set; }
+        /* 
+         * MQTT DiscoveryPrefix
+         * MQTT Auth
+         */
 
         /// <summary>
         /// How many minutes the PC is idle before user is considered AFK.
@@ -41,8 +40,7 @@ namespace HAPCTracker
         /// </summary>
         public void ThrowIfInvalid()
         {
-            if (!Uri.TryCreate(BaseUrl, UriKind.Absolute, out _)) throw new ArgumentException("Invalid BaseUrl value");
-            if (string.IsNullOrWhiteSpace(AccessToken)) throw new ArgumentNullException("Missing AccessToken value");
+            new UriBuilder(MqttServer); // will throw if invalid
             if (AwayMinutes <= 0) throw new ArgumentOutOfRangeException("AwayMinutes must be greater than 0");
             if (UpdateSeconds <= 0) throw new ArgumentOutOfRangeException("UpdateSeconds must be greater than 0");
         }
@@ -75,8 +73,7 @@ namespace HAPCTracker
 
             return new Configuration
             {
-                BaseUrl = subKey.GetValue<string>(nameof(BaseUrl)),
-                AccessToken = subKey.GetValue<string>(nameof(AccessToken)),
+                MqttServer = subKey.GetValue<string>(nameof(MqttServer)),
                 AwayMinutes = subKey.GetValue<int>(nameof(AwayMinutes), DefaultAwayMinutes),
                 UpdateSeconds = subKey.GetValue<int>(nameof(UpdateSeconds), DefaultUpdateSeconds),
             };
@@ -94,8 +91,7 @@ namespace HAPCTracker
                 Registry.CurrentUser.OpenSubKey(RegistryKey, true)
                 ?? Registry.CurrentUser.CreateSubKey(RegistryKey);
 
-            subKey.SetValue(nameof(BaseUrl), BaseUrl);
-            subKey.SetValue(nameof(AccessToken), AccessToken);
+            subKey.SetValue(nameof(MqttServer), MqttServer);
             subKey.SetValue(nameof(AwayMinutes), AwayMinutes);
             subKey.SetValue(nameof(UpdateSeconds), UpdateSeconds);
         }
