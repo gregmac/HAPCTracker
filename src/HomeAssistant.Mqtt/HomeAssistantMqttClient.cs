@@ -41,8 +41,6 @@ namespace HomeAssistant.Mqtt
                 password: password);
             await Task.Delay(100).ConfigureAwait(false);
             var client = await MqttClient.CreateAsync(server).ConfigureAwait(true);
-            //var client = MqttClient.CreateAsync(server).Result;
-
 
             return new HomeAssistantMqttClient(client, credentials);
         }
@@ -68,7 +66,7 @@ namespace HomeAssistant.Mqtt
                 qos)
                 .ConfigureAwait(false);
         }
-        
+
         public async Task AddAsync(ComponentBase item)
         {
             Sensors.Add(item);
@@ -91,10 +89,11 @@ namespace HomeAssistant.Mqtt
 
         protected async Task PublishConfig(ComponentBase component)
         {
-            var configChannel = $"homeassistant/{component.Type}/{component.Name}/config";
-            var valueChannel = $"homeassistant/{component.Type}/{component.Name}/value";
+            var configChannel = $"homeassistant/{component.Type}/{component.MqttName}/config";
+            var valueChannel = $"homeassistant/{component.Type}/{component.MqttName}/value";
             var payload = new ConfigMessage
             {
+                Name = component.Name,
                 StateTopic = valueChannel,
                 ValueTemplate = $"{{{{ value_json.{nameof(SensorData.State).ToLowerInvariant()} }}}}",
                 JsonAttributesTopic = valueChannel,
@@ -106,7 +105,7 @@ namespace HomeAssistant.Mqtt
 
         protected async Task PublishValue(ComponentBase component, SensorData value)
         {
-            var valueChannel = $"homeassistant/{component.Type}/{component.Name}/value";
+            var valueChannel = $"homeassistant/{component.Type}/{component.MqttName}/value";
             await PublishAsync(valueChannel, value, MqttQualityOfService.AtMostOnce).ConfigureAwait(false);
         }
     }

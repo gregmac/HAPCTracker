@@ -1,6 +1,7 @@
 ﻿using HomeAssistant.Mqtt.Payloads;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace HomeAssistant.Mqtt.Components
 {
@@ -11,9 +12,14 @@ namespace HomeAssistant.Mqtt.Components
     public abstract class ComponentBase
     {
         /// <summary>
-        /// Name of the sensor. Must be valid in MQTT topic
+        /// Name of the sensor
         /// </summary>
         public string Name { get; }
+
+        /// <summary>
+        /// MQTT channel name. Must be all alphanumeric and underscores
+        /// </summary>
+        public string MqttName { get; }
 
         /// <summary>
         /// Amount of time without an update before sensor value becomes unknown.
@@ -38,6 +44,7 @@ namespace HomeAssistant.Mqtt.Components
         protected ComponentBase(string name, ComponentType type, TimeSpan? expireAfter = null)
         {
             Name = name;
+            MqttName = Regex.Replace(name.ToLowerInvariant(), "[^a-z0-9]+", "_");
             Type = type;
             ExpireAfter = expireAfter;
         }

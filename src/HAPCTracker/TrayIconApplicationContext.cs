@@ -44,7 +44,7 @@ namespace HAPCTracker
         /// <summary>
         /// Name of sensor to report.
         /// </summary>
-        private string SensorName { get; } = $"{Environment.UserName}_{Environment.MachineName}";
+        private string SensorName { get; } = $"{Environment.UserName} on {Environment.MachineName}";
 
         private string MqttClientId { get; } = $"HAPCTracker{Regex.Replace(Environment.MachineName, "[^a-zA-Z0-9]+", "")}"; // alphanumeric only )
 
