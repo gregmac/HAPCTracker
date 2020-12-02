@@ -1,6 +1,7 @@
 ﻿using HomeAssistant.Mqtt.Payloads;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace HomeAssistant.Mqtt.Components
 {
@@ -30,6 +31,12 @@ namespace HomeAssistant.Mqtt.Components
         internal override void OverrideConfig(ConfigMessage config)
         {
             config.DeviceClass = DeviceClass.ToString();
+        }
+
+        protected override void DetailedToString(StringBuilder output)
+        {
+            base.DetailedToString(output);
+            output.AppendLine($"  device_class = {DeviceClass}");
         }
     }
 }

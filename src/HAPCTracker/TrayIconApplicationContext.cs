@@ -246,15 +246,15 @@ namespace HAPCTracker
 
             if (CurrentError != null)
             {
-                TrayIcon.ShowBalloonTip(5000, null, CurrentError.GetMessages(), ToolTipIcon.Error);
+                TrayIcon.ShowBalloonTip(5000, "Not connected", CurrentError.GetMessages(), ToolTipIcon.Error);
             }
             else if (HaClient.IsConnected)
             {
-                TrayIcon.ShowBalloonTip(5000, null, $"Connected to {HaClient.ServerName} and reporting '{HaAwaySensor.Name}' ({HaAwaySensor.Type}.{HaAwaySensor.MqttName})", ToolTipIcon.Info);
+                TrayIcon.ShowBalloonTip(5000, $"Connected to {HaClient.ServerName}", HaAwaySensor.ToString(detailed: true), ToolTipIcon.Info);
             }
             else
             {
-                TrayIcon.ShowBalloonTip(5000, null, "Not connected", ToolTipIcon.Warning);
+                TrayIcon.ShowBalloonTip(5000, "Not connected", null, ToolTipIcon.Warning);
             }
         }
     }

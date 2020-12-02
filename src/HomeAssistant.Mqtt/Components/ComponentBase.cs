@@ -1,6 +1,7 @@
 ﻿using HomeAssistant.Mqtt.Payloads;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace HomeAssistant.Mqtt.Components
@@ -72,6 +73,27 @@ namespace HomeAssistant.Mqtt.Components
         internal virtual void OverrideConfig(ConfigMessage config)
         {
             // nothing
+        }
+
+        public override string ToString() => $"{Type}.{MqttName} = {CurrentState?.State}";
+
+        public string ToString(bool detailed)
+        {
+            if (!detailed) return ToString();
+
+            var output = new StringBuilder();
+            DetailedToString(output);
+            return output.ToString();
+        }
+
+        protected virtual void DetailedToString(StringBuilder output)
+        {
+            output.AppendLine(ToString());
+            if (CurrentState?.Attributes != null)
+            {
+                foreach (var attr in CurrentState?.Attributes) output.AppendLine($"  {attr.Key}: {attr.Value}");
+            }
+            output.AppendLine($"  friendly_name: {Name}");
         }
     }
 }
