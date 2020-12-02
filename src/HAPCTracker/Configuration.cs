@@ -69,8 +69,11 @@ namespace HAPCTracker
         public static Configuration LoadOrCreate()
         {
             using var subKey = Registry.CurrentUser.OpenSubKey(RegistryKey, true);
-            if (subKey == null) return null;
 
+            // new config
+            if (subKey == null) return new Configuration();
+
+            // load config
             return new Configuration
             {
                 MqttServer = subKey.GetValue<string>(nameof(MqttServer)),
