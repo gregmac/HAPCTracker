@@ -85,7 +85,8 @@ namespace HomeAssistant.Mqtt
                     new MqttApplicationMessage(
                         topic,
                         Serialize(payload)),
-                    qos)
+                    qos,
+                    retain: true)
                     .ConfigureAwait(false);
             }
         }
