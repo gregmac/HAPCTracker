@@ -47,7 +47,7 @@ namespace HAPCTracker
         /// </summary>
         private string SensorName { get; } = $"{Environment.UserName} on {Environment.MachineName}";
 
-        private string MqttClientId { get; } = $"HAPCTracker{Regex.Replace(Environment.MachineName, "[^a-zA-Z0-9]+", "")}"; // alphanumeric only )
+        private static string MqttClientId { get; } = $"HAPCTracker{Regex.Replace(Environment.MachineName, "[^a-zA-Z0-9]+", "")}"; // alphanumeric only )
 
         /// <summary>
         /// Friendly OS name to report as attribute
@@ -84,7 +84,7 @@ namespace HAPCTracker
 
             // setup tray menu
             context.TrayIcon.ContextMenuStrip.Items.Add(new ToolStripMenuItem("&Configuration", null, (_, __)
-                => ConfigForm.ModifyConfig(config, () => context.SaveAndApply(config))));
+                => context.ShowConfigForm(config)));
             context.TrayIcon.ContextMenuStrip.Items.Add(new ToolStripMenuItem("E&xit", null, (_, __) => Application.Exit()));
             context.TrayIcon.Click += context.TrayIcon_Click;
 
@@ -99,10 +99,12 @@ namespace HAPCTracker
             else
             {
                 // first time through, so show UI
-                if (!ConfigForm.ModifyConfig(config, () => context.SaveAndApply(config)))
+                if (!context.ShowConfigForm(config))
                 {
                     MessageBox.Show("Cannot continue without valid config", "No Configuration", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    throw new Exception("Cannot continue. TODO improve this state.");
+
+                    context.ExitThread();
+                    return context;
                 }
             }
 
@@ -114,6 +116,14 @@ namespace HAPCTracker
 
             return context;
         }
+
+        /// <summary>
+        /// Helper method to show config and wire to <see cref="SaveAndApply(Configuration)"/>
+        /// and <see cref="TestConfig(Configuration)"/>.
+        /// </summary>
+        /// <param name="config"></param>
+        private bool ShowConfigForm(Configuration config)
+            => ConfigForm.ModifyConfig(config, () => SaveAndApply(config), () => TestConfig(config));
 
         /// <summary>
         /// <see cref="Configuration.Save">Saves</see> and <see cref="ApplyConfig(Configuration)">applies</see>
@@ -139,6 +149,19 @@ namespace HAPCTracker
 
             HaAwaySensor = new BinarySensor(SensorName, AwayTime.Add(TimeSpan.FromSeconds(5)), BinarySensorDeviceClass.occupancy);
             await HaClient.AddAsync(HaAwaySensor).ConfigureAwait(false);
+        }
+
+        private static async Task TestConfig(Configuration config)
+        {
+            var clientId = $"{MqttClientId}test{DateTime.UtcNow:ffff}";
+            var client = await HomeAssistantMqttClient.CreateAsync(config.MqttServer, clientId).ConfigureAwait(false);
+            if (await client.ConnectIfNeededAsync().ConfigureAwait(false))
+            {
+                // success
+                return;
+            }
+
+            throw client.LastConnectionError ?? new Exception("Unknown error");
         }
 
         /// <summary>

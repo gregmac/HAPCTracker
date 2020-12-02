@@ -32,9 +32,9 @@ namespace HAPCTracker
             this.UiMqttServer = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.uiCancel = new System.Windows.Forms.Button();
-            this.uiSave = new System.Windows.Forms.Button();
-            this.uiTest = new System.Windows.Forms.Button();
+            this.UiCancel = new System.Windows.Forms.Button();
+            this.UiSave = new System.Windows.Forms.Button();
+            this.UiTest = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.UiAfkTime = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
@@ -66,44 +66,45 @@ namespace HAPCTracker
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.uiCancel);
-            this.panel2.Controls.Add(this.uiSave);
-            this.panel2.Controls.Add(this.uiTest);
+            this.panel2.Controls.Add(this.UiCancel);
+            this.panel2.Controls.Add(this.UiSave);
+            this.panel2.Controls.Add(this.UiTest);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel2.Location = new System.Drawing.Point(145, 0);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(322, 52);
             this.panel2.TabIndex = 3;
             // 
-            // uiCancel
+            // UiCancel
             // 
-            this.uiCancel.Location = new System.Drawing.Point(214, 11);
-            this.uiCancel.Name = "uiCancel";
-            this.uiCancel.Size = new System.Drawing.Size(101, 27);
-            this.uiCancel.TabIndex = 5;
-            this.uiCancel.Text = "Cancel";
-            this.uiCancel.UseVisualStyleBackColor = true;
-            this.uiCancel.Click += new System.EventHandler(this.UiCancel_Click);
+            this.UiCancel.Location = new System.Drawing.Point(214, 11);
+            this.UiCancel.Name = "UiCancel";
+            this.UiCancel.Size = new System.Drawing.Size(101, 27);
+            this.UiCancel.TabIndex = 5;
+            this.UiCancel.Text = "Cancel";
+            this.UiCancel.UseVisualStyleBackColor = true;
+            this.UiCancel.Click += new System.EventHandler(this.UiCancel_Click);
             // 
-            // uiSave
+            // UiSave
             // 
-            this.uiSave.Location = new System.Drawing.Point(107, 11);
-            this.uiSave.Name = "uiSave";
-            this.uiSave.Size = new System.Drawing.Size(101, 27);
-            this.uiSave.TabIndex = 4;
-            this.uiSave.Text = "Save";
-            this.uiSave.UseVisualStyleBackColor = true;
-            this.uiSave.Click += new System.EventHandler(this.UiSave_Click);
+            this.UiSave.Location = new System.Drawing.Point(107, 11);
+            this.UiSave.Name = "UiSave";
+            this.UiSave.Size = new System.Drawing.Size(101, 27);
+            this.UiSave.TabIndex = 4;
+            this.UiSave.Text = "Save";
+            this.UiSave.UseVisualStyleBackColor = true;
+            this.UiSave.Click += new System.EventHandler(this.UiSave_Click);
             // 
-            // uiTest
+            // UiTest
             // 
-            this.uiTest.Enabled = false;
-            this.uiTest.Location = new System.Drawing.Point(0, 11);
-            this.uiTest.Name = "uiTest";
-            this.uiTest.Size = new System.Drawing.Size(101, 27);
-            this.uiTest.TabIndex = 3;
-            this.uiTest.Text = "Test";
-            this.uiTest.UseVisualStyleBackColor = true;
+            this.UiTest.Enabled = false;
+            this.UiTest.Location = new System.Drawing.Point(0, 11);
+            this.UiTest.Name = "UiTest";
+            this.UiTest.Size = new System.Drawing.Size(101, 27);
+            this.UiTest.TabIndex = 3;
+            this.UiTest.Text = "Test";
+            this.UiTest.UseVisualStyleBackColor = true;
+            this.UiTest.Click += new System.EventHandler(this.UiTest_Click);
             // 
             // label1
             // 
@@ -199,10 +200,10 @@ namespace HAPCTracker
             // 
             // ConfigForm
             // 
-            this.AcceptButton = this.uiSave;
+            this.AcceptButton = this.UiSave;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.uiCancel;
+            this.CancelButton = this.UiCancel;
             this.ClientSize = new System.Drawing.Size(467, 171);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label6);
@@ -232,9 +233,9 @@ namespace HAPCTracker
         private System.Windows.Forms.TextBox UiMqttServer;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button uiCancel;
-        private System.Windows.Forms.Button uiSave;
-        private System.Windows.Forms.Button uiTest;
+        private System.Windows.Forms.Button UiCancel;
+        private System.Windows.Forms.Button UiSave;
+        private System.Windows.Forms.Button UiTest;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown UiAfkTime;
         private System.Windows.Forms.Label label3;

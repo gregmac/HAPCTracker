@@ -6,18 +6,22 @@ namespace HAPCTracker
 {
     public sealed partial class ConfigForm : Form
     {
-        private ConfigForm(Configuration config, Func<Task> saveCallback)
+        private ConfigForm(Configuration config, Func<Task> saveCallback, Func<Task> testCallback = null)
         {
             InitializeComponent();
             SaveCallback = saveCallback;
+            TestCallback = testCallback;
 
             UiMqttServer.Bind(config, nameof(Configuration.MqttServer));
             UiAfkTime.Bind(config, nameof(Configuration.AwayMinutes));
             UiUpdateSeconds.Bind(config, nameof(Configuration.UpdateSeconds));
+
+            UiTest.Enabled = TestCallback != null;
         }
 
         private static ConfigForm Instance { get; set; }
         public Func<Task> SaveCallback { get; }
+        public Func<Task> TestCallback { get; }
 
         /// <summary>
         /// Show the form as a dialog, and return true if the user saves changes.
@@ -27,7 +31,7 @@ namespace HAPCTracker
         /// <param name="config">The configuration. The values in this
         /// object will be modified</param>
         /// <param name="saveCallback">Callback when save is called</param>
-        public static bool ModifyConfig(Configuration config, Func<Task> saveCallbackAsync)
+        public static bool ModifyConfig(Configuration config, Func<Task> saveCallbackAsync, Func<Task> testCallbackAsync = null)
         {
             if (Instance != null)
             {
@@ -36,7 +40,7 @@ namespace HAPCTracker
                 return false;
             }
 
-            Instance = new ConfigForm(config, saveCallbackAsync);
+            Instance = new ConfigForm(config, saveCallbackAsync, testCallbackAsync);
 
             return Instance.ShowDialog() == DialogResult.OK;
         }
@@ -78,6 +82,28 @@ namespace HAPCTracker
         private void ConfigForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Instance = null;
+        }
+
+        private async void UiTest_Click(object sender, EventArgs e)
+        {
+            while (true)
+            {
+                try
+                {
+                    await TestCallback.Invoke().ConfigureAwait(false);
+                    MessageBox.Show(this, $"Connection to {UiMqttServer.Text} successful", "Test Connection", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    if (MessageBox.Show(this, $"Connection to {UiMqttServer.Text} failed.\n\n{ex.GetMessages()}", "Test Connection", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error)
+                        == DialogResult.Retry)
+                    {
+                        continue; // loop
+                    }
+                }
+
+                return;
+            }
         }
     }
 }
