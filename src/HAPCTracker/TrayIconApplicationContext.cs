@@ -23,6 +23,11 @@ namespace HAPCTracker
         private NotifyIcon TrayIcon { get; }
 
         /// <summary>
+        /// Status form pop-up
+        /// </summary>
+        private StatusForm StatusForm { get; }
+
+        /// <summary>
         /// How long to consider away. Comes from <see cref="Configuration.AwayMinutes"/>.
         /// </summary>
         private TimeSpan AwayTime { get; set; }
@@ -64,6 +69,7 @@ namespace HAPCTracker
                 Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath),
                 ContextMenuStrip = new ContextMenuStrip(),
             };
+            StatusForm = new StatusForm();
         }
 
         /// <summary>
@@ -206,15 +212,28 @@ namespace HAPCTracker
                     SetCurrentError(ex);
                 }
 
-                // max 63 chars
                 try
                 {
+                    await StatusForm.SetStatus(
+                        CurrentError != null
+#if DEBUG
+                            ? CurrentError.ToString()
+#else
+                            ? CurrentError.GetMessages()
+#endif
+                            : HaClient.IsConnected
+                                ? $"Connected to {HaClient.ServerName}\n{HaAwaySensor.ToString(true)}"
+                                : "Not connected"
+                        ).ConfigureAwait(false);
+
+                    // max 63 chars
                     TrayIcon.Text = CurrentError != null
                         ? $"{TrayIconTitle}\nError: Click for details"
                         : $"{TrayIconTitle}\n{(HaClient.IsConnected ? "Connected" : "Not connected")}";
                 }
                 catch (Exception ex)
                 {
+                    // max 63 chars
                     TrayIcon.Text = ex.Message.Substring(0, 63);
                 }
 
@@ -244,18 +263,7 @@ namespace HAPCTracker
                 return;
             }
 
-            if (CurrentError != null)
-            {
-                TrayIcon.ShowBalloonTip(5000, "Not connected", CurrentError.GetMessages(), ToolTipIcon.Error);
-            }
-            else if (HaClient.IsConnected)
-            {
-                TrayIcon.ShowBalloonTip(5000, $"Connected to {HaClient.ServerName}", HaAwaySensor.ToString(detailed: true), ToolTipIcon.Info);
-            }
-            else
-            {
-                TrayIcon.ShowBalloonTip(5000, "Not connected", null, ToolTipIcon.Warning);
-            }
+            StatusForm.Show();
         }
     }
 }

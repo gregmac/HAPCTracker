@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HAPCTracker
@@ -33,6 +35,34 @@ namespace HAPCTracker
         /// <param name="dataMember">The property of <paramref name="dataMember"/> to bind.</param>
         public static void Bind(this NumericUpDown control, object dataSource, string dataMember)
             => control.DataBindings.Add(nameof(control.Value), dataSource, dataMember);
+
+        /// <summary>
+        /// Set up databinding on a <see cref="Label"/> control.
+        /// </summary>
+        /// <param name="control">The label to bind to</param>
+        /// <param name="dataSource">The data source object</param>
+        /// <param name="dataMember">The property of <paramref name="dataMember"/> to bind.</param>
+        public static void Bind(this Label control, object dataSource, string dataMember)
+            => control.DataBindings.Add(nameof(control.Text), dataSource, dataMember);
+
+        /// <summary>
+        /// Invoke a background action to run on the control's thread.
+        /// See <see cref="Control.Invoke(Delegate)"/>.
+        /// </summary>
+        /// <param name="control">Control to operate on</param>
+        /// <param name="method">Method to invoke</param>
+        public static async Task Invoke(this Control control, Action method)
+        {
+            if (control.InvokeRequired)
+            {
+                //await Task<object>.Factory.FromAsync<Delegate>(control.BeginInvoke, control.EndInvoke, method, null);
+                await Task.Factory.FromAsync(control.BeginInvoke(method), control.EndInvoke).ConfigureAwait(false);
+            }
+            else
+            {
+                method();
+            }
+        }
 
         /// <summary>
         /// Get a typed value from a registry entry
